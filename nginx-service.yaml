@@ -10,3 +10,25 @@ spec: # especificação do recurso
     name: metrics # nome da porta
   selector: # seletor para identificar os pods/deployment que esse svc irá expor
     app: nginx # label que identifica o pod/deployment que será exposto
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: site-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.localhost
+      http:
+        paths: 
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx-svc
+              port:
+                name: http
